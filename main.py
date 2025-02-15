@@ -303,7 +303,7 @@ async def leave(ctx):
                             description=pages_logs,
                             color=discord.Color.teal()                            # dm me when they add aquamarine
                         )  
-                        # change all 10s to x if you want x member by page
+                        # change all 10s to x if you want x members by page
                         current_page = i // 10 + 1                                # Convert zero-based index to one-based page number
                         total_pages = (len(numbered_members_data) - 1) // 10 + 1  # Total pages (ceiling division)
                         embed.set_footer(text=f"Page {current_page}/{total_pages}  |  Members who attended: {len(voice_data)}")
