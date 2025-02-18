@@ -3,12 +3,15 @@ discord bot made by _raouf_blz_ *still under development (maybe??)*
     - returns a pagination with a numbered, sorted list of members who were in a 
     voice-channel, how much time each of them spent and how many they were.
     - creates a text channel to log the pagination to, even if deleted it recreates it.
-    - /join: makes the bot enter the voice channel you re in.
+    - /join: makes the bot enter the voice channel you re in and start tracking from that join_time.
     - /leave: the bot leaves the voice channel, you need to be in the vc for it to work,
     it calculates the time spent by each member and logs it.
     - the commands have role-based access.
     - saves data in case of connection problems, deletes all previous data only if /leave
     is executed.
+    - /reset_data: clears all tracking data and restarts tracking.
+    - /list: displays real-time tracking data in a paginated embed.
+    - /help_me: lists available commands.
 """
 
 import discord
@@ -143,7 +146,7 @@ async def periodic_save():
     await bot.wait_until_ready()
     while not bot.is_closed():
         save_voice_data()
-        print("Voice data saved.")
+        print("Voice data saved (periodic save)")
         await asyncio.sleep(30)  # Save every 30 seconds (adjust as needed)
 
 # Command to make the bot join a voice channel
@@ -228,14 +231,14 @@ async def on_voice_state_update(member, before, after):
         # Handle other members
         if before.channel != after.channel:
             # Member left the bot's channel
-            if before.channel and before.channel == bot_channel:
+            if before.channel == bot_channel:
                 if member.id in voice_data and voice_data[member.id]["join_time"]:
                     duration = now - voice_data[member.id]["join_time"]
                     voice_data[member.id]["total_duration"] += duration
                     voice_data[member.id]["join_time"] = None
 
             # Member joined the bot's channel
-            if after.channel and after.channel == bot_channel:
+            if after.channel == bot_channel:
                 if member.id not in voice_data:
                     voice_data[member.id] = {
                         "join_time": now,
