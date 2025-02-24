@@ -77,6 +77,7 @@ def load_voice_data():
         print(f"Error loading voice data: {e}")
         return {}
 
+
 # Bot events
 @bot.event
 async def on_ready():
@@ -84,8 +85,74 @@ async def on_ready():
     global voice_data
     voice_data = load_voice_data()
     print(f'Logged in as {bot.user}\n------------------------')
+    
+    # Iterate through all guilds the bot is in
+    for guild in bot.guilds:
+        # Find a channel with 'general' in its name
+        target_channel = None
+        for channel in guild.text_channels:
+            if "general" in channel.name.lower():  # Case-insensitive check
+                target_channel = channel
+                break
+        
+        if target_channel:
+            await target_channel.send("hello!!! Beep boop! if you'd like to try this bot you could add it to your server using this link: https://discord.com/oauth2/authorize?client_id=1337842155322085508&permissions=1385127045200&integration_type=0&scope=bot")
+        else:
+            print(f"No channel with 'general' in its name found in guild: {guild.name}")
+            
     # Start periodic save task
     bot.loop.create_task(periodic_save())
+
+    for guild in bot.guilds:
+        # check if the attendance channel exists
+        attendance_channel = discord.utils.get(guild.text_channels, name="oculus-attendance")
+        if not attendance_channel:
+            try:
+                # creates the attendance channel
+                overwrites = {
+                    guild.default_role: discord.PermissionOverwrite(send_messages=False),
+                    guild.me: discord.PermissionOverwrite(send_messages=True)
+                }
+                attendance_channel = await guild.create_text_channel("oculus-attendance", overwrites=overwrites)
+                await attendance_channel.send("This channel logs the time spent by members in voice chats.")
+                print(f"Created 'attendance' channel in guild: {guild.name}")
+            except Exception as e:
+                print(f"Error creating attendance channel in guild {guild.name}: {e}")
+
+
+@bot.event
+async def on_guild_join(guild):
+    # Check if the attendance channel already exists
+    attendance_channel = discord.utils.get(guild.text_channels, name="oculus-attendance")
+    if not attendance_channel:
+        try:
+            # Create the attendance channel
+            overwrites = {
+                guild.default_role: discord.PermissionOverwrite(send_messages=False),
+                guild.me: discord.PermissionOverwrite(send_messages=True)
+            }
+            attendance_channel = await guild.create_text_channel("oculus-attendance", overwrites=overwrites)
+            await attendance_channel.send("This channel logs the time spent by members in voice chats, it can't be deleted forever")
+        except Exception as e:
+            print(f"Error creating attendance channel: {e}")
+
+
+@bot.event
+async def on_guild_channel_delete(channel):
+    # checks if the deleted channel was the "attendance" channel
+    if channel.name == "oculus-attendance":
+        guild = channel.guild
+        try:
+            # create the attendance channel again
+            overwrites = {
+                guild.default_role: discord.PermissionOverwrite(send_messages=False),
+                guild.me: discord.PermissionOverwrite(send_messages=True)
+            }
+            new_attendance_channel = await guild.create_text_channel("oculus-attendance", overwrites=overwrites)
+            await new_attendance_channel.send("This channel logs the time spent by members in voice chats.")
+        except Exception as e:
+            print(f"Error recreating attendance channel: {e}")
+
 
 @bot.event
 async def on_resumed():
@@ -141,6 +208,21 @@ async def on_disconnect():
         except Exception as e:
             print(f"Error disconnecting from voice channel: {e}")
 
+    # Iterate through all guilds the bot is in
+    for guild in bot.guilds:
+        # Find a channel with 'general' in its name
+        target_channel = None
+        for channel in guild.text_channels:
+            if "general" in channel.name.lower():  # Case-insensitive check
+                target_channel = channel
+                break
+        
+        if target_channel:
+            await target_channel.send("Error detected! System malfunction! The internet!!! beep beep Initiating shutdown... or maybe just rebooting... THE END IS NEAAAARR!!")
+        else:
+            print(f"No channel with 'general' in its name found in guild: {guild.name}")
+            
+    
 # Periodically save voice data
 async def periodic_save():
     await bot.wait_until_ready()
