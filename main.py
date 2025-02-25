@@ -233,7 +233,49 @@ async def periodic_save():
 
 # Command to make the bot join a voice channel
 @bot.hybrid_command(name="join", description="The bot will join the server")
-@commands.has_any_role("Moderator", "Admin")
+@commands.has_any_role("Moderator", "Admin", "admin", "Leaders","ADMIN", "LEADER")
+async def join(ctx):
+    await ctx.defer()
+    
+    # Check if bot is already in a voice channel in this guild
+    existing_vc = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+    if existing_vc and existing_vc.is_connected():
+        return await ctx.send(f"{bot.user.name} is already connected to {existing_vc.channel.name}")
+    
+    if ctx.author.voice:
+        channel = ctx.author.voice.channel
+        try:
+            voice_client = await channel.connect()
+            now = datetime.datetime.now()
+
+            # Set global start time
+            global global_start_time
+            global_start_time = now
+
+            # Add bot to voice_data
+            voice_data[bot.user.id] = {
+                "join_time": now,
+                "total_duration": datetime.timedelta(),
+                "channel_name": channel.name
+            }
+
+            # Initialize voice_data for all members already in the channel
+            for member in channel.members:
+                if member.id != bot.user.id:
+                    voice_data[member.id] = {
+                        "join_time": now,
+                        "total_duration": datetime.timedelta(),
+                        "channel_name": channel.name
+                    }
+
+            print(f"Bot joined voice channel: {channel.name} at {now}")
+            await ctx.send(f"{bot.user.name} joined voice channel: {channel.name}")
+        except Exception as e:
+            await ctx.send(f"Error joining voice channel: {e}")
+    else:
+        await ctx.send("You are not connected to a voice channel.")
+        
+"""
 async def join(ctx):
     await ctx.defer()
     if ctx.author.voice:
@@ -276,7 +318,7 @@ async def join(ctx):
             await ctx.send(f"Error joining voice channel: {e}")
     else:
         await ctx.send("You are not connected to a voice channel.")
-
+"""
 # Handle voice state updates
 @bot.event
 async def on_voice_state_update(member, before, after):
@@ -368,7 +410,7 @@ class Paginator(View):
 
 # Command to make the bot leave the voice channel and log durations
 @bot.hybrid_command(name="leave", description="Leaves the voice channel and sends the time spent by each member and the bot")
-@commands.has_any_role("Moderator", "Admin")
+@commands.has_any_role("Moderator", "Admin", "admin", "Leaders","ADMIN", "LEADER")
 async def leave(ctx):
     await ctx.defer()
     save_voice_data()
@@ -438,7 +480,7 @@ async def leave(ctx):
 
 # Command to list durations in real-time
 @bot.hybrid_command(name="list", description="Returns a numbered, sorted list of durations")
-@commands.has_any_role("Moderator", "Admin")
+@commands.has_any_role("Moderator", "Admin", "admin", "Leaders","ADMIN", "LEADER")
 async def list(ctx):
     await ctx.send("real-time list")
     print("list called")
@@ -493,7 +535,7 @@ async def list(ctx):
 
 # Command to reset voice data
 @bot.hybrid_command(name="reset_data", description="Resets all voice activity data and restarts tracking")
-@commands.has_any_role("Moderator", "Admin")
+@commands.has_any_role("Moderator", "Admin", "admin", "Leaders","ADMIN", "LEADER")
 async def reset_data(ctx):
     await ctx.defer()
     global voice_data
@@ -517,7 +559,7 @@ async def reset_data(ctx):
 
 # Help command
 @bot.hybrid_command(name="help_me", description="Well, I hope it'll help")
-@commands.has_any_role("Moderator", "Admin")
+@commands.has_any_role("Moderator", "Admin", "admin", "Leaders","ADMIN", "LEADER")
 async def help_me(ctx):
     await ctx.send("/join: Makes the bot enter the voice channel you're in.\n/leave: The bot leaves the voice channel, you need to be in the VC for it to work; it calculates the time spent by each member and logs it.\n/list: Real-time list.\n/reset_data: Resets all voice activity data and restarts tracking.")
 
