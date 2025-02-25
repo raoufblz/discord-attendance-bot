@@ -91,21 +91,21 @@ async def on_ready():
         # Find a channel with 'general' in its name
         target_channel = None
         for channel in guild.text_channels:
-            if "general" in channel.name.lower():  # Case-insensitive check
+            if "project-oculus" in channel.name.lower():  # Case-insensitive check
                 target_channel = channel
                 break
         
         if target_channel:
             await target_channel.send("hello!!! Beep boop! if you'd like to try this bot you could add it to your server using this link: https://discord.com/oauth2/authorize?client_id=1337842155322085508&permissions=1385127045200&integration_type=0&scope=bot")
         else:
-            print(f"No channel with 'general' in its name found in guild: {guild.name}")
+            print(f"No channel with 'project-oculus' in its name found in guild: {guild.name}")
             
     # Start periodic save task
     bot.loop.create_task(periodic_save())
 
     for guild in bot.guilds:
         # check if the attendance channel exists
-        attendance_channel = discord.utils.get(guild.text_channels, name="oculus-attendance")
+        attendance_channel = discord.utils.get(guild.text_channels, name="project-oculus")
         if not attendance_channel:
             try:
                 # creates the attendance channel
@@ -113,7 +113,7 @@ async def on_ready():
                     guild.default_role: discord.PermissionOverwrite(send_messages=False),
                     guild.me: discord.PermissionOverwrite(send_messages=True)
                 }
-                attendance_channel = await guild.create_text_channel("oculus-attendance", overwrites=overwrites)
+                attendance_channel = await guild.create_text_channel("project-oculus", overwrites=overwrites)
                 await attendance_channel.send("This channel logs the time spent by members in voice chats.")
                 print(f"Created 'attendance' channel in guild: {guild.name}")
             except Exception as e:
@@ -123,7 +123,7 @@ async def on_ready():
 @bot.event
 async def on_guild_join(guild):
     # Check if the attendance channel already exists
-    attendance_channel = discord.utils.get(guild.text_channels, name="oculus-attendance")
+    attendance_channel = discord.utils.get(guild.text_channels, name="project-oculus")
     if not attendance_channel:
         try:
             # Create the attendance channel
@@ -131,7 +131,7 @@ async def on_guild_join(guild):
                 guild.default_role: discord.PermissionOverwrite(send_messages=False),
                 guild.me: discord.PermissionOverwrite(send_messages=True)
             }
-            attendance_channel = await guild.create_text_channel("oculus-attendance", overwrites=overwrites)
+            attendance_channel = await guild.create_text_channel("project-oculus", overwrites=overwrites)
             await attendance_channel.send("This channel logs the time spent by members in voice chats, it can't be deleted forever")
         except Exception as e:
             print(f"Error creating attendance channel: {e}")
@@ -140,7 +140,7 @@ async def on_guild_join(guild):
 @bot.event
 async def on_guild_channel_delete(channel):
     # checks if the deleted channel was the "attendance" channel
-    if channel.name == "oculus-attendance":
+    if channel.name == "project-oculus":
         guild = channel.guild
         try:
             # create the attendance channel again
@@ -148,7 +148,7 @@ async def on_guild_channel_delete(channel):
                 guild.default_role: discord.PermissionOverwrite(send_messages=False),
                 guild.me: discord.PermissionOverwrite(send_messages=True)
             }
-            new_attendance_channel = await guild.create_text_channel("oculus-attendance", overwrites=overwrites)
+            new_attendance_channel = await guild.create_text_channel("project-oculus", overwrites=overwrites)
             await new_attendance_channel.send("This channel logs the time spent by members in voice chats.")
         except Exception as e:
             print(f"Error recreating attendance channel: {e}")
@@ -213,14 +213,14 @@ async def on_disconnect():
         # Find a channel with 'general' in its name
         target_channel = None
         for channel in guild.text_channels:
-            if "general" in channel.name.lower():  # Case-insensitive check
+            if "project-oculus" in channel.name.lower():  # Case-insensitive check
                 target_channel = channel
                 break
         
         if target_channel:
             await target_channel.send("Error detected! System malfunction! The internet!!! beep beep Initiating shutdown... or maybe just rebooting... THE END IS NEAAAARR!!")
         else:
-            print(f"No channel with 'general' in its name found in guild: {guild.name}")
+            print(f"No channel with 'project-oculus' in its name found in guild: {guild.name}")
             
     
 # Periodically save voice data
@@ -459,7 +459,7 @@ async def leave(ctx):
                         embed.set_footer(text=f"Page {current_page}/{total_pages} | Members who attended: {len(voice_data)}")
                         log_pages.append(embed)
 
-                    attendance_channel = discord.utils.get(ctx.guild.text_channels, name="oculus-attendance")
+                    attendance_channel = discord.utils.get(ctx.guild.text_channels, name="project-oculus")
                     if attendance_channel:
                         view = Paginator(log_pages)
                         await attendance_channel.send(embed=log_pages[0], view=view)
@@ -524,7 +524,7 @@ async def list(ctx):
             embed.set_footer(text=f"Page {current_page}/{total_pages} | Members who attended: {len(voice_data)}")
             log_pages.append(embed)
 
-        attendance_channel = discord.utils.get(ctx.guild.text_channels, name="oculus-attendance")
+        attendance_channel = discord.utils.get(ctx.guild.text_channels, name="project-oculus")
         if attendance_channel:
             view = Paginator(log_pages)
             await attendance_channel.send(embed=log_pages[0], view=view)
