@@ -96,7 +96,7 @@ async def on_ready():
                 break
         
         if target_channel:
-            await target_channel.send("hello!!! Beep boop! if you'd like to try this bot you could add it to your server using this link: https://discord.com/oauth2/authorize?client_id=1337842155322085508&permissions=1385127045200&integration_type=0&scope=bot")
+            await target_channel.send("hello!!! Beep boop! if you'd like to try this bot you could add it to your server using this link: insert your bot link")
         else:
             print(f"No channel with 'project-oculus' in its name found in guild: {guild.name}")
             
@@ -275,50 +275,7 @@ async def join(ctx):
     else:
         await ctx.send("You are not connected to a voice channel.")
         
-"""
-async def join(ctx):
-    await ctx.defer()
-    if ctx.author.voice:
-        channel = ctx.author.voice.channel
-        try:
-            voice_client = discord.utils.get(bot.voice_clients, guild=ctx.guild)
-            if voice_client:
-                if voice_client.is_connected():
-                    await voice_client.move_to(channel)  # Move to the new channel if already connected
-                    await ctx.send(f"{bot.user.name} moved to voice channel: {channel.name}")
-                    return
 
-            # Connect to the channel if not already connected
-            voice_client = await channel.connect()
-            now = datetime.datetime.now()
-
-            # Set global start time
-            global global_start_time
-            global_start_time = now
-
-            # Add bot to voice_data
-            voice_data[bot.user.id] = {
-                "join_time": now,
-                "total_duration": datetime.timedelta(),
-                "channel_name": channel.name
-            }
-
-            # Initialize voice_data for all members already in the channel
-            for member in channel.members:
-                if member.id != bot.user.id:
-                    voice_data[member.id] = {
-                        "join_time": now,
-                        "total_duration": datetime.timedelta(),
-                        "channel_name": channel.name
-                    }
-
-            print(f"Bot joined voice channel: {channel.name} at {now}")
-            await ctx.send(f"{bot.user.name} joined voice channel: {channel.name}")
-        except Exception as e:
-            await ctx.send(f"Error joining voice channel: {e}")
-    else:
-        await ctx.send("You are not connected to a voice channel.")
-"""
 # Handle voice state updates
 @bot.event
 async def on_voice_state_update(member, before, after):
