@@ -7,6 +7,7 @@
 - the commands have role-based access.
 - /list: logs real-time voice data in a channel the bot creates.
 - /help: a command that lists all available commands and what they do.
-- every command is now a slash command (Discord's prefered way)
+- every command is now a slash command (Discord's prefered way).
+- /reset_data: deletes all past voice data and restarts tracking.
 - saves data in case of connection problems, deletes all previous data only if /leave
     is executed.
