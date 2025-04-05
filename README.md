@@ -1,3 +1,6 @@
+### OCULUS
+![a1613327-09bd-44f9-8147-de5070be9a7c](https://github.com/user-attachments/assets/23e44700-9f6a-49f4-8b26-21dced33678c)
+
 - returns a pagination with a numbered, sorted list of members who were in a 
     voice-channel, how much time each of them spent and how many they were.
 - creates a text channel to log the pagination to, even if deleted it recreates it.
