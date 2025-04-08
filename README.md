@@ -8,6 +8,9 @@
   <a href="https://discordpy.readthedocs.io/">
     <img src="https://img.shields.io/badge/discord.py-2.3%2B-green" alt="Discord.py Version">
   </a>
+  <a href="https://github.com/theskumar/python-dotenv">
+    <img src="https://img.shields.io/badge/python--dotenv-1.1.0-yellow" alt="python-dotenv Version">
+  </a>
 </p>
 
 **A voice activity tracking Discord bot that logs member participation and generates time-based reports**
