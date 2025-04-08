@@ -12,6 +12,7 @@
 
 **A voice activity tracking Discord bot that logs member participation and generates time-based reports**
 
+**README file still in developement 🔨🔨🔨**
 
 ## Features:
 🔊 **Voice Tracking:**  
@@ -33,7 +34,7 @@
 - Role restrictions: Moderator/Admin roles only
 - Channel protection: Critical logging channel can't be deleted
 
-## Installation:
+## Installation: (in developement 🔨🔨)
 
 1. **Clone Repository:**  
 ```bash
@@ -50,18 +51,20 @@ TOKEN=insert_your_discord_bot_token_here
 pip install -r requirements.txt
 ```
 
-**README file still in developement 🔨🔨🔨**
 
-- returns a pagination with a numbered, sorted list of members who were in a 
-    voice-channel, how much time each of them spent and how many they were.
+## Usage: (in developement 🔨🔨)
+
 - creates a text channel to log the pagination to, even if deleted it recreates it.
+
+## Command documentation: (in developement 🔨🔨)
+- every command is now a slash command (Discord's prefered way).
+- the commands have role-based access; only those with specefic roles can use them.
+
+  
 - /join: makes the bot enter the voice channel you re in.
 - /leave: the bot leaves the voice channel, you need to be in the vc for it to work,
     it calculates the time spent by each member and logs it.
-- the commands have role-based access.
 - /list: logs real-time voice data in a channel the bot creates.
 - /help: a command that lists all available commands and what they do.
-- every command is now a slash command (Discord's prefered way).
 - /reset_data: deletes all past voice data and restarts tracking.
-- saves data in case of connection problems, deletes all previous data only if /leave
-    is executed.
+
