@@ -3,13 +3,13 @@
 
 <p align="center">
   <a href="https://www.python.org/">
-    <img src="https://img.shields.io/badge/Python-3.8%2B-blue" alt="Python Version">
+    <img src="https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python Version">
   </a>
-  <a href="https://discordpy.readthedocs.io/">
-    <img src="https://img.shields.io/badge/discord.py-2.3%2B-green" alt="Discord.py Version">
+  <a href="https://docs.pycord.dev/">
+    <img src="https://img.shields.io/badge/PyCord-2.4.1-blue?style=for-the-badge&logo=discord&logoColor=white" alt="PyCord">
   </a>
   <a href="https://github.com/theskumar/python-dotenv">
-    <img src="https://img.shields.io/badge/python--dotenv-1.1.0-yellow" alt="python-dotenv Version">
+    <img src="https://img.shields.io/badge/python--dotenv-1.1.0-cyan?style=for-the-badge&logo=python&logoColor=white" alt="python-dotenv">
   </a>
 </p>
 
