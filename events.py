@@ -1,3 +1,11 @@
+"""
+Event handlers for the Discord bot.
+
+This file contains event listeners that respond to Discord events such as
+when the bot is ready, joins a server, connects to a voice channel, disconnects, re-connects
+, channel deletion. It manages voice tracking and ensures the bot's functionality
+across different scenarios.
+"""
 import discord
 import datetime
 from shared import bot, voice_data, global_start_time
@@ -6,6 +14,21 @@ from utils import load_voice_data, save_voice_data, periodic_save, ensure_bot_ch
 # bot events
 @bot.event
 async def on_ready():
+    """
+    Event handler for when the bot is ready and connected to Discord.
+    
+    This function is called when the bot successfully connects to Discord.
+    It syncs commands, loads saved voice data, sends a greeting message to
+    the bot's channel in each guild, and starts the periodic save task.
+    
+    Parameters
+    ----------
+    None
+    
+    Returns
+    -------
+    None
+    """
     await bot.sync_commands()  # py-cord now
     # load data into the shared variable
     temp_data = load_voice_data()
@@ -36,10 +59,38 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
+    """
+    Event handler for when the bot joins a new guild.
+    
+    Creates the bot's dedicated channel in the new guild.
+    
+    Parameters
+    ----------
+    guild : discord.Guild
+        The guild that the bot has joined.
+    
+    Returns
+    -------
+    None
+    """
     await ensure_bot_channel(guild) 
     
 @bot.event
 async def on_guild_channel_delete(channel):
+    """
+    Event handler for when a channel is deleted in a guild.
+    
+    If the bot's dedicated channel is deleted, this recreates it.
+    
+    Parameters
+    ----------
+    channel : discord.abc.GuildChannel
+        The channel that was deleted.
+    
+    Returns
+    -------
+    None
+    """
     if channel.name == "project-oculus":
         guild = channel.guild
         await ensure_bot_channel(guild)
@@ -47,6 +98,19 @@ async def on_guild_channel_delete(channel):
 
 @bot.event
 async def on_resumed():
+    """
+    Event handler for when the bot's connection to Discord is resumed.
+    
+    Reloads voice data and attempts to reconnect to the last known voice channel.
+    
+    Parameters
+    ----------
+    None
+    
+    Returns
+    -------
+    None
+    """
     global voice_data
     voice_data = load_voice_data()
     print(f"{bot.user} reconnected to discord.")
@@ -83,6 +147,20 @@ async def on_resumed():
 
 @bot.event
 async def on_disconnect():
+    """
+    Event handler for when the bot disconnects from Discord.
+    
+    Updates and saves voice data, cleans up voice clients, and sends
+    a disconnection message to the bot's channel in each guild.
+    
+    Parameters
+    ----------
+    None
+    
+    Returns
+    -------
+    None
+    """
     now = datetime.datetime.now()
     for member_id, data in voice_data.items():
         if data["join_time"]:
@@ -116,6 +194,26 @@ async def on_disconnect():
 # handle voice state updates
 @bot.event
 async def on_voice_state_update(member, before, after):
+    """
+    Event handler for when a member's voice state changes.
+    
+    tracks when members join/leave the bot's voice channel and updates
+    their time tracking data accordingly. Also handles the bot's own movement
+    between voice channels.
+    
+    Parameters
+    ----------
+    member : discord.Member
+        The member whose voice state changed.
+    before : discord.VoiceState
+        The voice state before the change.
+    after : discord.VoiceState
+        The voice state after the change.
+    
+    Returns
+    -------
+    None
+    """
     now = datetime.datetime.now()
 
     # check if the bot is connected to a voice channel
