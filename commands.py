@@ -1,3 +1,12 @@
+"""
+Command handlers for the Discord bot.
+
+This file defines slash commands (Discord s preferred way of making commands) that allow users to interact with the bot,
+including joining/leaving voice channels, listing voice activity data,
+resetting tracked data, and displaying help information. Commands are
+restricted to users with specific roles.
+"""
+
 import discord
 import datetime
 from discord.ext import commands
@@ -8,6 +17,21 @@ from utils import save_voice_data, load_voice_data, format_time, send_paginated_
 @bot.slash_command(name="join", description="The bot will join the server")
 @commands.has_any_role("Moderator", "Admin", "admin", "Leaders","ADMIN", "LEADER")
 async def join(ctx):
+    """
+    Joins the voice channel that the user is in.
+    
+    This command makes the bot join the voice channel where the user is currently connected to,
+    it initializes tracking for all members already in the channel.
+    
+    Parameters
+    ----------
+    ctx : discord.ApplicationContext
+        The context of the slash command.
+        
+    Returns
+    -------
+    None
+    """
     await ctx.defer()
     
     # checks if bot is already in a voice channel in this guild
@@ -52,6 +76,22 @@ async def join(ctx):
 @bot.slash_command(name="leave", description="Leaves the voice channel and sends the time spent by each member and the bot")
 @commands.has_any_role("Moderator", "Admin", "admin", "Leaders","ADMIN", "LEADER")
 async def leave(ctx):
+    """
+    Leave the voice channel and display time tracking results.
+    
+    This command makes the bot leave the voice channel and displays a paginated
+    list of all members' time spent in the channel, sorted by duration.
+    The user must be in the same voice channel as the bot.
+    
+    Parameters
+    ----------
+    ctx : discord.ApplicationContext
+        The context of the slash command.
+        
+    Returns
+    -------
+    None
+    """
     await ctx.defer()
     save_voice_data()
 
@@ -99,6 +139,22 @@ async def leave(ctx):
 @bot.slash_command(name="list", description="Returns a numbered, sorted list of durations")
 @commands.has_any_role("Moderator", "Admin", "admin", "Leaders","ADMIN", "LEADER")
 async def list(ctx):
+    """
+    Displays a real-time list of time spent by members in the same voice channel.
+    
+    This command generates a paginated list of all tracked members and their
+    time spent in the same voice channel, sorted by duration in descending order.
+    It calculates current session durations for members still in voice channels.
+    
+    Parameters
+    ----------
+    ctx : discord.ApplicationContext
+        The context of the slash command.
+        
+    Returns
+    -------
+    None
+    """
     await ctx.defer()
     await ctx.respond("Generating real-time list...")
     print("list command called")
@@ -143,6 +199,21 @@ async def list(ctx):
 @bot.slash_command(name="reset_data", description="Resets all voice activity data and restarts tracking")
 @commands.has_any_role("Moderator", "Admin", "admin", "Leaders","ADMIN", "LEADER")
 async def reset_data(ctx):
+    """
+    Reset all voice activity tracking data.
+    
+    This command clears all stored voice activity data and restarts tracking
+    for members currently in the voice channel if the bot is connected.
+    
+    Parameters
+    ----------
+    ctx : discord.ApplicationContext
+        The context of the slash command.
+        
+    Returns
+    -------
+    None
+    """
     await ctx.defer()
     global voice_data
     voice_data.clear()
@@ -167,4 +238,19 @@ async def reset_data(ctx):
 @bot.slash_command(name="help_me", description="Well, I hope it'll help")
 @commands.has_any_role("Moderator", "Admin", "admin", "Leaders","ADMIN", "LEADER")
 async def help_me(ctx):
+    """
+    Displays help information about available commands.
+    
+    This command provides a brief description of all available commands
+    and their functionality to help users understand how to use the bot.
+    
+    Parameters
+    ----------
+    ctx : discord.ApplicationContext
+        The context of the slash command.
+        
+    Returns
+    -------
+    None
+    """
     await ctx.respond("/join: Makes the bot enter the voice channel you're in.\n/leave: The bot leaves the voice channel, you need to be in the VC for it to work; it calculates the time spent by each member and logs it.\n/list: Real-time list.\n/reset_data: Resets all voice activity data and restarts tracking.")
