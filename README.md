@@ -15,29 +15,33 @@
 
 **A voice activity tracking Discord bot that logs member participation and generates time-based reports**
 
-**README file still in developement 🔨🔨🔨**
+**"WE RECENTLY SWITCHED TO PY-CORD!!"**
 
 ## Features:
 🔊 **Voice Tracking:**  
 - Records time spent by members in voice channels
 - Tracks bot connection status and member join/leave events
 
+💻 **Command documentation:** 
+- every command is a slash command (Discord's prefered way).
+- the commands have role-based access; only those with specefic roles can use them.
+
+- /join: makes the bot enter the voice channel you re in.
+- /leave: the bot leaves the voice channel, you need to be in the vc for it to work,
+    it calculates the time spent by each member and logs it as a Discord pagination.
+- /list: logs real-time voice data in the bot specefic channel.
+- /help: lists all available commands and what they do.
+- /reset_data: deletes all past voice data and restarts tracking.
+
 📔 **Persistent Logging:**  
 - Automatic `voice_data.json` storage
 - Recreates deleted logging channel (`#project-oculus`)
-
-💻 **Command Suite:**  
-- `/join` - Connects to your voice channel
-- `/leave` - Disconnects and generates reports
-- `/list` - Shows real-time tracking data
-- `/reset_data` - Clears all stored activity data
-- `/help_me` - Command documentation
 
 :accessibility: **Access Control:**  
 - Role restrictions: Moderator/Admin roles only
 - Channel protection: Critical logging channel can't be deleted
 
-## Installation: (in developement 🔨🔨)
+## Installation:
 
 1. **Clone Repository:**  
 ```bash
@@ -58,7 +62,7 @@ pip install -r requirements.txt
 python .\main.py
 ```
 
-## Usage: (in developement 🔨🔨)
+## Usage: 
 
 - the bot creates a text channel to log the pagination to, even if deleted it recreates it.
 - provided that you re in a voice channel use `/join` to invite the bot to that channel, the bot will start tracking from that time.
@@ -67,14 +71,4 @@ python .\main.py
 - in case you need to delete the voice data or restart tracking, use `/reset_data` to delete all past data and start anew.
 - in case you forget any of these commands or what they do, use the `/help` command.
 
-## Command documentation: (in developement 🔨🔨)
-- every command is a slash command (Discord's prefered way).
-- the commands have role-based access; only those with specefic roles can use them.
-
-- /join: makes the bot enter the voice channel you re in.
-- /leave: the bot leaves the voice channel, you need to be in the vc for it to work,
-    it calculates the time spent by each member and logs it as a Discord pagination.
-- /list: logs real-time voice data in the bot specefic channel.
-- /help: lists all available commands and what they do.
-- /reset_data: deletes all past voice data and restarts tracking.
 
