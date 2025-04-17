@@ -71,4 +71,6 @@ python .\main.py
 - in case you need to delete the voice data or restart tracking, use `/reset_data` to delete all past data and start anew.
 - in case you forget any of these commands or what they do, use the `/help` command.
 
+## Acknowledgment:
+- Big thanks to [@djely2005](https://github.com/djely2005) for the original idea and his continuous feedback
 
